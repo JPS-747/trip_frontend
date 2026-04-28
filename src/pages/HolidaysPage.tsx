@@ -65,7 +65,7 @@ const HolidaysPage = () => {
             }
         }
 
-        // Import holidays from CSV using /holidays/import endpoint
+        // Import holidays from CSV using importHolidaysFromApi
         const handleImportHolidays = async (e: React.ChangeEvent<HTMLInputElement>) => {
             const file = e.target.files?.[0]
             if (!file) return
@@ -83,12 +83,7 @@ const HolidaysPage = () => {
                         keys.forEach((k, i) => (obj[k] = values[i] || ''))
                         return obj
                     })
-                const response = await fetch(`${apiBaseUrl}/holidays/import`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(holidays),
-                })
-                if (!response.ok) throw new Error('Failed to import holidays')
+                await importHolidaysFromApi(holidays, apiBaseUrl)
                 alert('Holidays imported successfully!')
                 window.location.reload()
             } catch (err) {
